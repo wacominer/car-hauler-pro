@@ -356,56 +356,67 @@ export default function DeliverWarrior() {
           </div>
 
           {/* AXLE SCREEN */}
-          <div className="mt-6 border p-4 rounded bg-gray-100">
-            <h2 className="font-bold mb-3">Axle Screen</h2>
-            <div className="grid grid-cols-3 gap-4 text-center">
-              <div>
-                <div className="font-semibold">Steer Axle</div>
-                <div className={axleColor(steerAxle, AXLE_LIMITS.steer)}>
-                  {Math.round(steerAxle)} lbs
-                </div>
-              </div>
-              <div>
-                <div className="font-semibold">Drive Axle</div>
-                <div className={axleColor(driveAxle, AXLE_LIMITS.drive)}>
-                  {Math.round(driveAxle)} lbs
-                </div>
-              </div>
-              <div>
-                <div className="font-semibold">Trailer Axle</div>
-                <div className={axleColor(trailerAxle, AXLE_LIMITS.trailer)}>
-                  {Math.round(trailerAxle)} lbs
-                </div>
-              </div>
-            </div>
-          </div>
+          <div classN<div className="mt-6 border p-4 rounded bg-gray-100">
+  <h2 className="font-bold mb-3">Axle Screen</h2>
 
-          {/* VISUAL TRUCK DIAGRAM */}
-          <div className="mt-6 border p-4 rounded bg-white">
-            <h2 className="font-bold mb-3">Visual Truck Layout</h2>
-            <div className="flex items-center space-x-2">
-              <div className="flex flex-col items-center">
-                <div className="w-20 h-12 bg-blue-300 flex items-center justify-center text-xs">TB</div>
-                <div className="w-20 h-12 bg-blue-400 flex items-center justify-center text-xs">OC</div>
-                <div className="text-xs mt-1">Truck</div>
-              </div>
+  <div className="overflow-x-auto">
+    <div className="flex justify-between text-center gap-4">
+      <div>
+        <div className="font-semibold">Steer Axle</div>
+        <div className={axleColor(steerAxle, AXLE_LIMITS.steer)}>
+          {Math.round(steerAxle)} lbs
+        </div>
+      </div>
 
-              <div className="text-xl">→</div>
+      <div>
+        <div className="font-semibold">Drive Axle</div>
+        <div className={axleColor(driveAxle, AXLE_LIMITS.drive)}>
+          {Math.round(driveAxle)} lbs
+        </div>
+      </div>
 
-              <div className="flex space-x-1">
-                {BASE_POSITIONS.slice(2).map((pos) => (
-                  <div key={pos} className="w-16 h-12 bg-gray-300 flex items-center justify-center text-xs">
-                    {pos}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="text-xs mt-3 text-gray-600">
-              Blue = Head Rack | Gray = Trailer Positions
-            </div>
-          </div>
-        </>
-      )}
+      <div>
+        <div className="font-semibold">Trailer Axle</div>
+        <div className={axleColor(trailerAxle, AXLE_LIMITS.trailer)}>
+          {Math.round(trailerAxle)} lbs
+        </div>
+      </div>
     </div>
-  );
-}
+  </div>
+</div>
+         {/* VISUAL TRUCK DIAGRAM */}
+          <div className="mt-6 border p-4 rounded bg-white">
+  <h2 className="font-bold mb-3">Visual Truck Layout</h2>
+
+  <div className="flex items-center overflow-x-auto gap-4">
+
+    {/* Truck Head */}
+    <div className="flex flex-col items-center">
+      <div className="w-20 h-10 bg-blue-500 text-white flex items-center justify-center text-xs rounded">
+        TB
+      </div>
+      <div className="w-20 h-10 bg-blue-600 text-white flex items-center justify-center text-xs rounded mt-1">
+        OC
+      </div>
+      <div className="text-xs mt-1 font-semibold">HEAD</div>
+    </div>
+
+    <div className="text-2xl">→</div>
+
+    {/* Trailer */}
+    <div className="flex gap-2">
+      {BASE_POSITIONS.slice(2).map((pos) => (
+        <div
+          key={pos}
+          className="w-16 h-10 bg-gray-400 text-white flex items-center justify-center text-xs rounded"
+        >
+          {pos}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div className="text-xs mt-3 text-gray-600">
+    Blue = Head Rack | Gray = Trailer Positions
+  </div>
+</div>
