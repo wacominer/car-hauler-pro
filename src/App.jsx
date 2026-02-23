@@ -192,6 +192,7 @@ export default function DeliverWarrior() {
     : 0;
 
   const heightWarning = estimatedTotalHeight > HEIGHT_LIMIT_IN;
+ 
 
   // Axle distribution per position realism
   const axleDistribution = autoCars.map((car, index) => {
@@ -204,8 +205,8 @@ export default function DeliverWarrior() {
 
  
   const steerAxle = truckBaseWeight * 0.2;
-const driveAxle = truckBaseWeight * 0.8 + totalVehicleWeight * 0.5;
-const trailerAxle = stingerWeight + totalVehicleWeight * 0.5;
+  const driveAxle = truckBaseWeight * 0.8 + totalVehicleWeight * 0.5;
+  const trailerAxle = stingerWeight + totalVehicleWeight * 0.5;
 
 // ================= CENTER OF GRAVITY =================
 const totalAxleWeight = driveAxle + trailerAxle;
@@ -216,7 +217,19 @@ const balancePercent =
     : 0;
 
 const clampedBalance = Math.max(-50, Math.min(50, balancePercent));
+ 
+  // ================= SMART WARNINGS =================
+
+
 const balancePosition = 50 + clampedBalance;
+  
+  // ================= SMART WARNINGS =================
+const evCount = autoCars.filter(car => car.model.includes("EV")).length;
+
+const isFrontHeavy = clampedBalance > 15;
+const isRearHeavy = clampedBalance < -15;
+const isNearDotLimit = dotPercentage > 95;
+const tooManyEVs = evCount >= 4;
 
   const axleColor = (value, limit) => {
     if (value > limit) return "text-red-600 font-bold";
@@ -367,6 +380,50 @@ const balancePosition = 50 + clampedBalance;
               </div>
             )}
           </div>
+		  {/* SMART LOAD WARNINGS */}
+<div className="mt-6 border p-4 rounded bg-red-50">
+  <h2 className="font-bold mb-3 text-red-700">Load Risk Analysis</h2>
+
+  <div className="space-y-2 text-sm font-semibold">
+
+    {isFrontHeavy && (
+      <div className="text-red-600">
+        ⚠ Front Heavy — Shift weight rearward
+      </div>
+    )}
+
+    {isRearHeavy && (
+      <div className="text-red-600">
+        ⚠ Rear Heavy — Risk of trailer overload
+      </div>
+    )}
+
+    {isNearDotLimit && (
+      <div className="text-orange-600">
+        ⚠ Approaching DOT 80,000 lb limit
+      </div>
+    )}
+
+    {heightWarning && (
+      <div className="text-red-600">
+        ⚠ Height Risk — May exceed 13'6"
+      </div>
+    )}
+
+    {tooManyEVs && (
+      <div className="text-yellow-600">
+        ⚠ High EV Concentration — Heavy battery load
+      </div>
+    )}
+
+    {!isFrontHeavy && !isRearHeavy && !isNearDotLimit && !heightWarning && !tooManyEVs && (
+      <div className="text-green-600">
+        ✅ Load configuration looks safe
+      </div>
+    )}
+
+  </div>
+</div>
 {/* CENTER OF GRAVITY */}
 <div className="mt-6 border p-4 rounded bg-white">
   <h2 className="font-bold mb-4">Center of Gravity</h2>
@@ -423,7 +480,7 @@ const balancePosition = 50 + clampedBalance;
 
         <div className="w-full bg-gray-300 h-4 rounded">
           <div
-            className={`h-4 rounded transition-all duration-500 ${barColor}`}
+            className={`h-4 rounded transition-all duration-700 ease-out ${barColor}`}
             style={{ width: `${percent}%` }}
           />
         </div>
