@@ -225,7 +225,8 @@ export default function DeliverWarrior() {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto bg-white text-black min-h-screen">
+    <div className="min-h-screen bg-gray-100 flex justify-center">
+  <div className="w-full max-w-4xl bg-white p-4 sm:p-6 text-black shadow-lg rounded-lg">
       <h1 className="text-2xl font-bold mb-6">Car Hauler Pro v1.3</h1>
 
       {/* Search */}
@@ -356,7 +357,7 @@ export default function DeliverWarrior() {
           </div>
 
           {/* AXLE SCREEN */}
-          <div classN<div className="mt-6 border p-4 rounded bg-gray-100">
+          <div className="mt-6 border p-4 rounded bg-gray-100">
   <h2 className="font-bold mb-3">Axle Screen</h2>
 
   <div className="overflow-x-auto">
@@ -416,7 +417,14 @@ export default function DeliverWarrior() {
     </div>
   </div>
 
-  <div className="text-xs mt-3 text-gray-600">
+    <div className="text-xs mt-3 text-gray-600">
     Blue = Head Rack | Gray = Trailer Positions
   </div>
 </div>
+
+        </>
+      )}
+    </div>
+  </div>
+);
+}
