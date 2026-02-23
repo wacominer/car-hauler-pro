@@ -202,9 +202,21 @@ export default function DeliverWarrior() {
     };
   });
 
+ 
   const steerAxle = truckBaseWeight * 0.2;
-  const driveAxle = truckBaseWeight * 0.8 + totalVehicleWeight * 0.5;
-  const trailerAxle = stingerWeight + totalVehicleWeight * 0.5;
+const driveAxle = truckBaseWeight * 0.8 + totalVehicleWeight * 0.5;
+const trailerAxle = stingerWeight + totalVehicleWeight * 0.5;
+
+// ================= CENTER OF GRAVITY =================
+const totalAxleWeight = driveAxle + trailerAxle;
+
+const balancePercent =
+  totalAxleWeight > 0
+    ? ((driveAxle - trailerAxle) / totalAxleWeight) * 100
+    : 0;
+
+const clampedBalance = Math.max(-50, Math.min(50, balancePercent));
+const balancePosition = 50 + clampedBalance;
 
   const axleColor = (value, limit) => {
     if (value > limit) return "text-red-600 font-bold";
@@ -355,7 +367,36 @@ export default function DeliverWarrior() {
               </div>
             )}
           </div>
+{/* CENTER OF GRAVITY */}
+<div className="mt-6 border p-4 rounded bg-white">
+  <h2 className="font-bold mb-4">Center of Gravity</h2>
 
+  <div className="relative w-full h-6 bg-gray-300 rounded">
+
+    {/* Center Line */}
+    <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-black"></div>
+
+    {/* Moving Indicator */}
+    <div
+      className="absolute top-0 h-6 w-4 bg-red-600 rounded transition-all duration-500"
+      style={{ left: `${balancePosition}%`, transform: "translateX(-50%)" }}
+    ></div>
+  </div>
+
+  <div className="flex justify-between text-xs mt-2 font-semibold">
+    <span>Front Heavy</span>
+    <span>Balanced</span>
+    <span>Rear Heavy</span>
+  </div>
+
+  <div className="text-center mt-3 font-bold">
+    {clampedBalance > 10
+      ? "⚠ Front Heavy"
+      : clampedBalance < -10
+      ? "⚠ Rear Heavy"
+      : "✅ Balanced Load"}
+  </div>
+</div>
           {/* AXLE SCREEN */}
 <div className="mt-6 border p-4 rounded bg-gray-100">
   <h2 className="font-bold mb-4">Axle Screen</h2>
