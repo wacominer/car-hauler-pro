@@ -357,33 +357,38 @@ export default function DeliverWarrior() {
           </div>
 
           {/* AXLE SCREEN */}
-          <div className="mt-6 border p-4 rounded bg-gray-100">
-  <h2 className="font-bold mb-3">Axle Screen</h2>
+<div className="mt-6 border p-4 rounded bg-gray-100">
+  <h2 className="font-bold mb-4">Axle Screen</h2>
 
-  <div className="overflow-x-auto">
-    <div className="flex justify-between text-center gap-4">
-      <div>
-        <div className="font-semibold">Steer Axle</div>
-        <div className={axleColor(steerAxle, AXLE_LIMITS.steer)}>
-          {Math.round(steerAxle)} lbs
+  {[
+    { label: "Steer Axle", value: steerAxle, limit: AXLE_LIMITS.steer },
+    { label: "Drive Axle", value: driveAxle, limit: AXLE_LIMITS.drive },
+    { label: "Trailer Axle", value: trailerAxle, limit: AXLE_LIMITS.trailer }
+  ].map((axle) => {
+    const percent = Math.min(100, (axle.value / axle.limit) * 100);
+    const barColor =
+      percent > 100
+        ? "bg-red-600"
+        : percent > 90
+        ? "bg-yellow-500"
+        : "bg-green-600";
+
+    return (
+      <div key={axle.label} className="mb-4">
+        <div className="flex justify-between text-sm font-semibold mb-1">
+          <span>{axle.label}</span>
+          <span>{Math.round(axle.value)} / {axle.limit} lbs</span>
+        </div>
+
+        <div className="w-full bg-gray-300 h-4 rounded">
+          <div
+            className={`h-4 rounded transition-all duration-500 ${barColor}`}
+            style={{ width: `${percent}%` }}
+          />
         </div>
       </div>
-
-      <div>
-        <div className="font-semibold">Drive Axle</div>
-        <div className={axleColor(driveAxle, AXLE_LIMITS.drive)}>
-          {Math.round(driveAxle)} lbs
-        </div>
-      </div>
-
-      <div>
-        <div className="font-semibold">Trailer Axle</div>
-        <div className={axleColor(trailerAxle, AXLE_LIMITS.trailer)}>
-          {Math.round(trailerAxle)} lbs
-        </div>
-      </div>
-    </div>
-  </div>
+    );
+  })}
 </div>
          {/* VISUAL TRUCK DIAGRAM */}
           <div className="mt-6 border p-4 rounded bg-white">
