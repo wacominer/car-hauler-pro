@@ -387,6 +387,12 @@ const loadTrip = () => {
 >
   Save Current Trip
 </button>
+<button
+  onClick={loadTrip}
+  className="mt-3 ml-3 bg-blue-600 text-white px-4 py-2 rounded"
+>
+  Load Saved Trip
+</button>
         {cars.length >= maxCapacity && (
           <div className="text-red-600 font-bold mt-2">
             Stinger capacity limit reached ({maxCapacity} vehicles)
