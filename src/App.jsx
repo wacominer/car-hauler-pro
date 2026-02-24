@@ -157,8 +157,13 @@ export default function DeliverWarrior() {
   const [search, setSearch] = useState("");
   const [stingerModel, setStingerModel] = useState("Cottrell CX-09");
   const [stingerMaterial, setStingerMaterial] = useState("Aluminum");
+  
+   
+  const [tandemSlide, setTandemSlide] = useState(0);
 
   const truckBaseWeight = 18000;
+
+  
   const stingerWeight = STINGER_LIBRARY[stingerModel][stingerMaterial];
 
   // Determine capacity based on stinger name (7, 8, or 9 car)
@@ -203,33 +208,52 @@ export default function DeliverWarrior() {
     };
   });
 
- 
-  const steerAxle = truckBaseWeight * 0.2;
-  const driveAxle = truckBaseWeight * 0.8 + totalVehicleWeight * 0.5;
-  const trailerAxle = stingerWeight + totalVehicleWeight * 0.5;
-
 // ================= CENTER OF GRAVITY =================
-const totalAxleWeight = driveAxle + trailerAxle;
+
+const positionWeight = autoCars.reduce((acc, car, index) => {
+  const positionBias =
+    (BASE_POSITIONS.length - index) / BASE_POSITIONS.length;
+  return acc + car.weight * positionBias;
+}, 0);
+
+const totalWeight = totalVehicleWeight || 1;
 
 const balancePercent =
-  totalAxleWeight > 0
-    ? ((driveAxle - trailerAxle) / totalAxleWeight) * 100
-    : 0;
+  ((positionWeight / totalWeight) - 0.5) * 100;
 
 const clampedBalance = Math.max(-50, Math.min(50, balancePercent));
- 
-  // ================= SMART WARNINGS =================
-
-
 const balancePosition = 50 + clampedBalance;
-  
-  // ================= SMART WARNINGS =================
+
+
+// ================= SMART WARNINGS =================
+
 const evCount = autoCars.filter(car => car.model.includes("EV")).length;
 
 const isFrontHeavy = clampedBalance > 15;
 const isRearHeavy = clampedBalance < -15;
 const isNearDotLimit = dotPercentage > 95;
 const tooManyEVs = evCount >= 4;
+
+
+// ================= REAL AXLE + TANDEM SLIDE =================
+
+const baseSteer = truckBaseWeight * 0.2;
+const baseDrive = truckBaseWeight * 0.8;
+
+const biasFactor = clampedBalance / 100;
+
+const frontShift = totalVehicleWeight * (0.5 + biasFactor);
+const rearShift = totalVehicleWeight * (0.5 - biasFactor);
+
+const slideEffect = tandemSlide * 400;
+
+const steerAxle = baseSteer + frontShift * 0.1;
+
+const driveAxle =
+  baseDrive + frontShift * 0.6 + slideEffect;
+
+const trailerAxle =
+  stingerWeight + rearShift * 0.9 - slideEffect;
 
   const axleColor = (value, limit) => {
     if (value > limit) return "text-red-600 font-bold";
@@ -455,6 +479,27 @@ const tooManyEVs = evCount >= 4;
   </div>
 </div>
           {/* AXLE SCREEN */}
+		  
+		  <div className="mt-6 border p-4 rounded bg-white">
+  <h2 className="font-bold mb-3">Tandem Slide Adjustment</h2>
+
+  <input
+    type="range"
+    min="-5"
+    max="5"
+    step="1"
+    value={tandemSlide}
+    onChange={(e) => setTandemSlide(Number(e.target.value))}
+    className="w-full"
+  />
+
+  <div className="flex justify-between text-sm font-semibold mt-2">
+    <span>Forward</span>
+    <span>Position: {tandemSlide}</span>
+    <span>Backward</span>
+  </div>
+  
+</div>
 <div className="mt-6 border p-4 rounded bg-gray-100">
   <h2 className="font-bold mb-4">Axle Screen</h2>
 
