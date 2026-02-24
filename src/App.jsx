@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 
 // =====================================
 // CAR HAULER PRO v1.3 (STABLE LOCKED VERSION + REALISM UPGRADE)
@@ -158,10 +158,23 @@ export default function DeliverWarrior() {
   const [stingerModel, setStingerModel] = useState("Cottrell CX-09");
   const [stingerMaterial, setStingerMaterial] = useState("Aluminum");
   
-   
-  const [tandemSlide, setTandemSlide] = useState(0);
+    const [tandemSlide, setTandemSlide] = useState(0);
+	useEffect(() => {
+  const stored = localStorage.getItem("carHaulerTrip");
 
-  const truckBaseWeight = 18000;
+  if (stored) {
+    const trip = JSON.parse(stored);
+
+    setCars(trip.cars || []);
+    setStingerModel(trip.stingerModel || "Cottrell CX-09");
+    setStingerMaterial(trip.stingerMaterial || "Aluminum");
+    setTandemSlide(trip.tandemSlide || 0);
+
+    console.log("Auto-loaded saved trip");
+  }
+}, []);
+ 
+    const truckBaseWeight = 18000;
 
   
   const stingerWeight = STINGER_LIBRARY[stingerModel][stingerMaterial];
@@ -272,6 +285,43 @@ const trailerAxle =
   const removeVehicle = (id) => {
     setCars((prev) => prev.filter((c) => c.id !== id));
   };
+  
+const saveTrip = () => {
+  const trip = {
+    cars,
+    stingerModel,
+    stingerMaterial,
+    tandemSlide
+  };
+
+  localStorage.setItem("carHaulerTrip", JSON.stringify(trip));
+
+  console.log("Trip saved to browser memory");
+};
+
+ 
+
+
+const loadTrip = () => {
+  const stored = localStorage.getItem("carHaulerTrip");
+
+  if (!stored) {
+    console.log("No saved trip found");
+    return;
+  }
+
+  const trip = JSON.parse(stored);
+
+  setCars(trip.cars || []);
+  setStingerModel(trip.stingerModel || "Cottrell CX-09");
+  setStingerMaterial(trip.stingerMaterial || "Aluminum");
+  setTandemSlide(trip.tandemSlide || 0);
+
+  console.log("Trip loaded from browser memory");
+  
+};
+
+
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center">
@@ -319,7 +369,7 @@ const trailerAxle =
           <option value="">Choose Model</option>
           {filteredModels.map((m) => (
             <option key={m} value={m}>
-              {m} — {VEHICLE_LIBRARY[m].weight} lbs / {VEHICLE_LIBRARY[m].height} in
+              {m} � {VEHICLE_LIBRARY[m].weight} lbs / {VEHICLE_LIBRARY[m].height} in
             </option>
           ))}
         </select>
@@ -330,6 +380,13 @@ const trailerAxle =
         >
           {cars.length >= maxCapacity ? "Capacity Reached" : "Add Vehicle"}
         </button>
+		 
+		 <button
+            onClick={saveTrip}
+            className="mt-3 bg-green-600 text-white px-4 py-2 rounded"
+>
+  Save Current Trip
+</button>
         {cars.length >= maxCapacity && (
           <div className="text-red-600 font-bold mt-2">
             Stinger capacity limit reached ({maxCapacity} vehicles)
@@ -412,39 +469,39 @@ const trailerAxle =
 
     {isFrontHeavy && (
       <div className="text-red-600">
-        ⚠ Front Heavy — Shift weight rearward
+        ? Front Heavy � Shift weight rearward
       </div>
     )}
 
     {isRearHeavy && (
       <div className="text-red-600">
-        ⚠ Rear Heavy — Risk of trailer overload
+        ? Rear Heavy � Risk of trailer overload
       </div>
     )}
 
     {isNearDotLimit && (
       <div className="text-orange-600">
-        ⚠ Approaching DOT 80,000 lb limit
+        ? Approaching DOT 80,000 lb limit
       </div>
     )}
 
     {heightWarning && (
       <div className="text-red-600">
-        ⚠ Height Risk — May exceed 13'6"
+        ? Height Risk � May exceed 13'6"
       </div>
     )}
 
     {tooManyEVs && (
       <div className="text-yellow-600">
-        ⚠ High EV Concentration — Heavy battery load
+        ? High EV Concentration � Heavy battery load
       </div>
     )}
 
     {!isFrontHeavy && !isRearHeavy && !isNearDotLimit && !heightWarning && !tooManyEVs && (
-      <div className="text-green-600">
-        ✅ Load configuration looks safe
-      </div>
-    )}
+  <div className="text-green-600">
+    ? Load configuration looks safe
+  </div>
+)}
 
   </div>
 </div>
@@ -472,10 +529,10 @@ const trailerAxle =
 
   <div className="text-center mt-3 font-bold">
     {clampedBalance > 10
-      ? "⚠ Front Heavy"
-      : clampedBalance < -10
-      ? "⚠ Rear Heavy"
-      : "✅ Balanced Load"}
+  ? "? Front Heavy"
+  : clampedBalance < -10
+  ? "? Rear Heavy"
+  : "? Balanced"}
   </div>
 </div>
           {/* AXLE SCREEN */}
@@ -550,7 +607,7 @@ const trailerAxle =
       <div className="text-xs mt-1 font-semibold">HEAD</div>
     </div>
 
-    <div className="text-2xl">→</div>
+    <div className="text-2xl">?</div>
 
     {/* Trailer */}
     <div className="flex gap-2">
