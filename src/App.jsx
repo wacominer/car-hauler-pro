@@ -790,7 +790,7 @@ const generateSnapshot = async () => {
   {/* BOTTOM DECK */}
   <div className="ml-32">
     <div className="text-sm font-bold mb-2 text-green-600">BOTTOM DECK</div>
-    <div className="flex gap-2 flex-wrap">
+    <div className="flex gap-3 overflow-x-auto pb-2">
       {BOTTOM_DECK.map((pos) => {
         const carInPosition = autoCars.find(car => car.position === pos);
 
