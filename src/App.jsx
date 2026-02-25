@@ -748,7 +748,7 @@ const generateSnapshot = async () => {
   {/* TOP DECK */}
   <div className="mb-8">
     <div className="text-sm font-bold mb-2 text-yellow-600">TOP DECK</div>
-    <div className="flex flex-col sm:flex-row gap-2">
+    <div className="grid grid-cols-2 sm:flex gap-2">
 
       {/* HEAD vertical con ruedas */}
       <div className="flex flex-col items-center">
