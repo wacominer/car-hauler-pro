@@ -356,9 +356,39 @@ const loadTrip = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex justify-center items-start py-10">
   <div className="w-full max-w-5xl bg-white p-8 text-black shadow-2xl rounded-2xl">
       <div className="mb-8 border-b pb-4">
-  <h1 className="text-3xl font-bold tracking-wide">
-    ?? Car Hauler Pro
-  </h1>
+  <h1 className="flex items-center gap-4 text-3xl font-extrabold tracking-widest uppercase">
+  <svg
+    width="60"
+    height="30"
+    viewBox="0 0 120 40"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className="text-purple-600"
+  >
+    {/* Head */}
+    <rect x="5" y="15" width="25" height="10" fill="currentColor" />
+    
+    {/* Cab */}
+    <rect x="30" y="10" width="20" height="15" fill="currentColor" />
+    
+    {/* Stinger frame */}
+    <rect x="50" y="5" width="60" height="5" fill="currentColor" />
+    <rect x="50" y="20" width="60" height="5" fill="currentColor" />
+    
+    {/* Wheels */}
+    <circle cx="20" cy="30" r="5" fill="currentColor" />
+    <circle cx="45" cy="30" r="5" fill="currentColor" />
+    <circle cx="80" cy="30" r="5" fill="currentColor" />
+    <circle cx="105" cy="30" r="5" fill="currentColor" />
+  </svg>
+
+  Car Hauler Pro
+</h1>
+  
+  
+
+    
+
   <p className="text-sm text-gray-500 mt-1">
     Professional Load Optimization System
   </p>
@@ -417,6 +447,7 @@ const loadTrip = () => {
     ? "bg-gray-400 text-white"
     : "bg-blue-600 hover:bg-blue-700 text-white"
 }`}
+
         >
           {cars.length >= maxCapacity ? "Capacity Reached" : "Add Vehicle"}
         </button>
@@ -661,12 +692,25 @@ const loadTrip = () => {
 
     {/* Truck Head */}
     <div className="flex flex-col items-center">
-      <div className="w-20 h-10 bg-blue-500 text-white flex items-center justify-center text-xs rounded">
-        TB
-      </div>
-      <div className="w-20 h-10 bg-blue-600 text-white flex items-center justify-center text-xs rounded mt-1">
-        OC
-      </div>
+     {["TB", "OC"].map((pos, index) => {
+  const carInPosition = autoCars.find(car => car.position === pos);
+
+  return (
+    <div
+      key={pos}
+      className={`w-20 h-14 ${
+        index === 0 ? "bg-blue-500" : "bg-blue-600"
+      } text-white flex flex-col items-center justify-center text-[10px] rounded p-1 ${index === 1 ? "mt-1" : ""}`}
+    >
+      <div className="font-bold">{pos}</div>
+      {carInPosition && (
+        <div className="truncate w-full text-center">
+          {carInPosition.model}
+        </div>
+      )}
+    </div>
+  );
+})} 
       <div className="text-xs mt-1 font-semibold">HEAD</div>
     </div>
 
@@ -674,15 +718,35 @@ const loadTrip = () => {
 
     {/* Trailer */}
     <div className="flex gap-2">
-      {BASE_POSITIONS.slice(2).map((pos) => (
-        <div
-          key={pos}
-          className="w-16 h-10 bg-gray-400 text-white flex items-center justify-center text-xs rounded"
-        >
-          {pos}
-        </div>
-      ))}
-    </div>
+  {BASE_POSITIONS.slice(2).map((pos) => {
+    const carInPosition = autoCars.find(car => car.position === pos);
+	let weightColor = "bg-gray-400";
+
+if (carInPosition) {
+  if (carInPosition.weight > 6500) {
+    weightColor = "bg-red-500";
+  } else if (carInPosition.weight > 4000) {
+    weightColor = "bg-yellow-500";
+  } else {
+    weightColor = "bg-green-500";
+  }
+}
+
+    return (
+      <div
+        key={pos}
+        className={`w-28 h-16 ${weightColor} text-white flex flex-col items-center justify-center text-[9px] rounded-xl p-2`}
+      >
+        <div className="font-bold">{pos}</div>
+        {carInPosition && (
+          <div className="truncate w-full text-center">
+            {carInPosition.model}
+          </div>
+        )}
+      </div>
+    );
+  })}
+</div>
   </div>
 
     <div className="text-xs mt-3 text-gray-600">
