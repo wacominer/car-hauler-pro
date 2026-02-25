@@ -159,7 +159,7 @@ export default function DeliverWarrior() {
   const [search, setSearch] = useState("");
   const [stingerModel, setStingerModel] = useState("Cottrell CX-09");
   const [stingerMaterial, setStingerMaterial] = useState("Aluminum");
-  
+  const [optimizeMessage, setOptimizeMessage] = useState("");
     const [tandemSlide, setTandemSlide] = useState(0);
 	useEffect(() => {
   const stored = localStorage.getItem("carHaulerTrip");
@@ -196,7 +196,7 @@ export default function DeliverWarrior() {
     );
   }, [search]);
 
-  const autoCars = useMemo(() => autoAssign(cars), [cars]);
+  const autoCars = cars;
 
   const totalVehicleWeight = autoCars.reduce((s, c) => s + c.weight, 0);
   const grossWeight = totalVehicleWeight + truckBaseWeight + stingerWeight;
@@ -283,6 +283,31 @@ const trailerAxle =
     setCars((prev) => [...prev, { ...data, model: selectedModel, id: Date.now() }]);
     setSelectedModel("");
   };
+  
+  const optimizeLoad = () => {
+  const sorted = [...cars].sort((a, b) => b.weight - a.weight);
+
+  const middle = Math.floor(BASE_POSITIONS.length / 2);
+
+  const optimized = sorted.map((car, index) => {
+    const positionIndex =
+      index % 2 === 0
+        ? middle - Math.floor(index / 2)
+        : middle + Math.floor(index / 2) + 1;
+
+    return {
+      ...car,
+      position: BASE_POSITIONS[positionIndex] || ""
+    };
+  });
+
+  setCars(optimized);
+    setOptimizeMessage("Load Optimized Successfully ?");
+
+  setTimeout(() => {
+    setOptimizeMessage("");
+  }, 3000);
+};
 
   const removeVehicle = (id) => {
     setCars((prev) => prev.filter((c) => c.id !== id));
@@ -384,6 +409,17 @@ const loadTrip = () => {
         >
           {cars.length >= maxCapacity ? "Capacity Reached" : "Add Vehicle"}
         </button>
+		<button
+  onClick={optimizeLoad}
+  className="mt-3 ml-3 bg-purple-600 text-white px-4 py-2 rounded"
+>
+  Optimize Load
+</button>
+  {optimizeMessage && (
+  <div className="text-green-600 font-bold mt-2">
+    {optimizeMessage}
+  </div>
+)}
 		 
 		 <button
             onClick={saveTrip}
