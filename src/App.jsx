@@ -1,4 +1,5 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
+import html2canvas from "html2canvas";
 
 // =====================================
 // CAR HAULER PRO v1.3 (STABLE LOCKED VERSION + REALISM UPGRADE)
@@ -161,6 +162,7 @@ export default function DeliverWarrior() {
   const [stingerMaterial, setStingerMaterial] = useState("Aluminum");
   const [optimizeMessage, setOptimizeMessage] = useState("");
     const [tandemSlide, setTandemSlide] = useState(0);
+	const layoutRef = useRef(null);
 	useEffect(() => {
   const stored = localStorage.getItem("carHaulerTrip");
 
@@ -349,7 +351,17 @@ const loadTrip = () => {
 
   console.log("Trip loaded");
 };
+const generateSnapshot = async () => {
+  if (!layoutRef.current) return;
 
+  const canvas = await html2canvas(layoutRef.current);
+  const image = canvas.toDataURL("image/png");
+
+  const link = document.createElement("a");
+  link.href = image;
+  link.download = "car-hauler-load.png";
+  link.click();
+};
 
 
   return (
@@ -426,7 +438,7 @@ const loadTrip = () => {
       </div>
 
       {/* Vehicle Add */}
-      <div className="mb-6">
+      <div className="mb-6 flex flex-wrap gap-3 items-center">
         <select
           value={selectedModel}
           onChange={(e) => setSelectedModel(e.target.value)}
@@ -464,22 +476,31 @@ const loadTrip = () => {
 )}
 		 
 		 <button
-            onClick={saveTrip}
-            className="mt-3 bg-green-600 hover:bg-green-700 transition-all duration-200 text-white px-4 py-2 rounded-xl shadow-md"
+  onClick={saveTrip}
+  className="mt-3 bg-green-600 hover:bg-green-700 transition-all duration-200 text-white px-4 py-2 rounded-xl shadow-md"
 >
   Save Current Trip
 </button>
+
 <button
   onClick={loadTrip}
   className="mt-3 ml-3 bg-blue-600 hover:bg-blue-700 transition-all duration-200 text-white px-4 py-2 rounded-xl shadow-md"
 >
   Load Saved Trip
 </button>
+
 <button
   onClick={clearSavedTrip}
   className="mt-3 ml-3 bg-red-600 hover:bg-red-700 transition-all duration-200 text-white px-4 py-2 rounded-xl shadow-md"
 >
   Clear Saved Trip
+</button>
+
+<button
+  onClick={generateSnapshot}
+  className="mt-3 ml-3 bg-black hover:bg-gray-800 transition-all duration-200 text-white px-4 py-2 rounded-xl shadow-md"
+>
+  ?? Generate Snapshot
 </button>
         {cars.length >= maxCapacity && (
           <div className="text-red-600 font-bold mt-2">
@@ -685,7 +706,7 @@ const loadTrip = () => {
   })}
 </div>
          {/* VISUAL TRUCK DIAGRAM */}
-          <div className="mt-6 border p-4 rounded bg-white">
+       <div ref={layoutRef} className="mt-6 border p-4 rounded bg-white">
   <h2 className="font-bold mb-3">Visual Truck Layout</h2>
 
   <div className="flex items-center overflow-x-auto gap-4">
