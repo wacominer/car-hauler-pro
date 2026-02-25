@@ -29,6 +29,7 @@ const STINGER_LIBRARY = {
   "Wally-Mo 9-Car": { Aluminum: 9300, Steel: 11500 },
   "Lohr 9-Car": { Aluminum: 9500, Steel: 12000 },
   "Lohr 8-Car": { Aluminum: 9200, Steel: 11500 }
+  "Kaufman Double Deck 9-Car": { Aluminum: 9800, Steel: 12500 },
 };
 
 // ================= FULL DEALERSHIP LIBRARY =================
