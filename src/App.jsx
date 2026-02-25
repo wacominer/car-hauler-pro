@@ -353,9 +353,16 @@ const loadTrip = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center">
-  <div className="w-full max-w-4xl bg-white p-4 sm:p-6 text-black shadow-lg rounded-lg">
-      <h1 className="text-2xl font-bold mb-6">Car Hauler Pro v1.3</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex justify-center items-start py-10">
+  <div className="w-full max-w-5xl bg-white p-8 text-black shadow-2xl rounded-2xl">
+      <div className="mb-8 border-b pb-4">
+  <h1 className="text-3xl font-bold tracking-wide">
+    ?? Car Hauler Pro
+  </h1>
+  <p className="text-sm text-gray-500 mt-1">
+    Professional Load Optimization System
+  </p>
+</div>
 
       {/* Search */}
       <input
