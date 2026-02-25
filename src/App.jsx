@@ -748,7 +748,7 @@ const generateSnapshot = async () => {
   {/* TOP DECK */}
   <div className="mb-8">
     <div className="text-sm font-bold mb-2 text-yellow-600">TOP DECK</div>
-    <div className="grid grid-cols-2 sm:flex gap-2">
+    <div className="flex overflow-x-auto gap-2 pb-2">
 
       {/* HEAD vertical con ruedas */}
       <div className="flex flex-col items-center">
@@ -774,7 +774,7 @@ const generateSnapshot = async () => {
         return (
           <div
             key={pos}
-            className="bg-yellow-500 text-white rounded-xl p-2 text-xs w-full sm:w-24 text-center shadow-sm"
+            className="bg-yellow-500 text-white rounded-xl p-2 text-xs min-w-[90px] text-center shadow-sm"
           >
             <div className="font-bold">{pos}</div>
             {carInPosition && (
