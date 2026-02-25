@@ -25,7 +25,9 @@ const STINGER_LIBRARY = {
   "Boydstun 7-Car": { Aluminum: 8800, Steel: 10500 },
   "Kaufman 9-Car": { Aluminum: 9100, Steel: 11300 },
   "NextGen 8-Car": { Aluminum: 8700, Steel: 10800 },
-  "Wally-Mo 9-Car": { Aluminum: 9300, Steel: 11500 }
+  "Wally-Mo 9-Car": { Aluminum: 9300, Steel: 11500 },
+  "Lohr 9-Car": { Aluminum: 9500, Steel: 12000 },
+  "Lohr 8-Car": { Aluminum: 9200, Steel: 11500 }
 };
 
 // ================= FULL DEALERSHIP LIBRARY =================
