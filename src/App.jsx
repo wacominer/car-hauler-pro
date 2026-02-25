@@ -513,7 +513,7 @@ const generateSnapshot = async () => {
 		 
 		 <button
   onClick={saveTrip}
-  className="mt-3 bg-green-600 hover:bg-green-700 transition-all duration-200 text-white px-4 py-2 rounded-xl shadow-md"
+  className="bg-green-600 text-white rounded-xl p-2 text-xs w-full sm:w-24 text-center shadow-sm"
 >
   Save Current Trip
 </button>
@@ -774,7 +774,7 @@ const generateSnapshot = async () => {
         return (
           <div
             key={pos}
-            className="bg-yellow-500 text-white rounded-xl p-2 text-xs w-24 text-center shadow-sm"
+            className="bg-yellow-500 text-white rounded-xl p-2 text-xs w-full sm:w-24 text-center shadow-sm"
           >
             <div className="font-bold">{pos}</div>
             {carInPosition && (
