@@ -29,7 +29,6 @@ const STINGER_LIBRARY = {
   "Wally-Mo 9-Car": { Aluminum: 9300, Steel: 11500 },
   "Lohr 9-Car": { Aluminum: 9500, Steel: 12000 },
   "Lohr 8-Car": { Aluminum: 9200, Steel: 11500 }
-  "Kaufman Double Deck 9-Car": { Aluminum: 9800, Steel: 12500 },
 };
 
 // ================= FULL DEALERSHIP LIBRARY =================
@@ -134,7 +133,34 @@ const VEHICLE_LIBRARY = {
   "Volvo XC60": { weight: 4200, height: 65 },
   "Volvo XC90": { weight: 4700, height: 69 },
   "Land Rover Defender": { weight: 5200, height: 77 },
-  "Range Rover Sport": { weight: 5100, height: 71 }
+  "Range Rover Sport": { weight: 5100, height: 71 },
+
+ // NUEVAS MARCAS
+ "Acura MDX": { weight: 4300, height: 67 },
+ "Acura RDX": { weight: 3900, height: 66 },
+ "Acura TLX": { weight: 3700, height: 57 },
+ "GMC Sierra 1500": { weight: 5500, height: 76 },
+ "Dodge Charger": { weight: 4200, height: 58 },
+ "Subaru Outback": { weight: 3800, height: 66 },
+ "Subaru Forester": { weight: 3600, height: 68 },
+ "Subaru Crosstrek": { weight: 3300, height: 63 },
+ "Mazda CX-5": { weight: 3700, height: 66 },
+ "Volkswagen Jetta": { weight: 3200, height: 57 },
+ "Volkswagen Tiguan": { weight: 3900, height: 66 },
+ "Volkswagen Atlas": { weight: 4600, height: 70 },
+ "Lexus RX 350": { weight: 4200, height: 67 },
+ "Lexus RX 350": { weight: 4200, height: 67 },
+ "Lexus GX 460": { weight: 5100, height: 74 },
+ "Lexus ES 350": { weight: 3700, height: 57 },
+ "Infiniti Q50": { weight: 3900, height: 57 },
+ "Infiniti QX60": { weight: 4400, height: 68 },
+ "Infiniti QX80": { weight: 5900, height: 76 },
+ "GMC Sierra 1500": { weight: 5500, height: 76 },
+ "GMC Yukon": { weight: 5900, height: 76 },
+ "GMC Acadia": { weight: 4200, height: 69 },
+ "Dodge Charger": { weight: 4200, height: 58 },
+ "Dodge Challenger": { weight: 4300, height: 57 },
+ "Dodge Durango": { weight: 5100, height: 71 },
 };
 
 const autoAssign = (cars) => {
