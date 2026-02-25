@@ -412,13 +412,17 @@ const loadTrip = () => {
         <button
           onClick={addVehicle}
           disabled={cars.length >= maxCapacity}
-          className={`px-4 py-2 rounded ${cars.length >= maxCapacity ? "bg-gray-400 text-white" : "bg-blue-600 text-white"}`}
+          className={`px-4 py-2 rounded-xl shadow-md transition-all duration-200 ${
+  cars.length >= maxCapacity
+    ? "bg-gray-400 text-white"
+    : "bg-blue-600 hover:bg-blue-700 text-white"
+}`}
         >
           {cars.length >= maxCapacity ? "Capacity Reached" : "Add Vehicle"}
         </button>
 		<button
   onClick={optimizeLoad}
-  className="mt-3 ml-3 bg-purple-600 text-white px-4 py-2 rounded"
+  className="mt-3 ml-3 bg-purple-600 hover:bg-purple-700 transition-all duration-200 text-white px-4 py-2 rounded-xl shadow-md"
 >
   Optimize Load
 </button>
@@ -430,19 +434,19 @@ const loadTrip = () => {
 		 
 		 <button
             onClick={saveTrip}
-            className="mt-3 bg-green-600 text-white px-4 py-2 rounded"
+            className="mt-3 bg-green-600 hover:bg-green-700 transition-all duration-200 text-white px-4 py-2 rounded-xl shadow-md"
 >
   Save Current Trip
 </button>
 <button
   onClick={loadTrip}
-  className="mt-3 ml-3 bg-blue-600 text-white px-4 py-2 rounded"
+  className="mt-3 ml-3 bg-blue-600 hover:bg-blue-700 transition-all duration-200 text-white px-4 py-2 rounded-xl shadow-md"
 >
   Load Saved Trip
 </button>
 <button
   onClick={clearSavedTrip}
-  className="mt-3 ml-3 bg-red-600 text-white px-4 py-2 rounded"
+  className="mt-3 ml-3 bg-red-600 hover:bg-red-700 transition-all duration-200 text-white px-4 py-2 rounded-xl shadow-md"
 >
   Clear Saved Trip
 </button>
