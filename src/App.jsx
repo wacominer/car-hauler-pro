@@ -752,14 +752,14 @@ const generateSnapshot = async () => {
 
       {/* HEAD vertical con ruedas */}
       <div className="flex flex-col items-center">
-        <div className="bg-blue-700 text-white w-20 h-32 rounded-xl shadow-md flex flex-col">
-          <div className="flex-1 flex items-center justify-center border-b border-blue-500">
-            <span className="font-bold text-sm">TB</span>
-          </div>
-          <div className="flex-1 flex items-center justify-center">
-            <span className="font-bold text-sm">OC</span>
-          </div>
-        </div>
+      <div className="bg-blue-700 text-white w-20 h-32 rounded-xl shadow-md flex flex-col">
+  <div className="flex-1 flex items-center justify-center border-b border-blue-500">
+    <span className="font-bold text-sm">TB</span>
+  </div>
+  <div className="flex-1 flex items-center justify-center">
+    <span className="font-bold text-sm">OC</span>
+  </div>
+</div>
 
         {/* Tractor Wheels */}
         <div className="flex gap-3 mt-1">
