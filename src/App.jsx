@@ -774,7 +774,7 @@ const generateSnapshot = async () => {
         return (
           <div
             key={pos}
-            className="bg-yellow-500 text-white rounded-xl px-3 py-2 text-xs h-16 min-w-[90px] flex items-center justify-center shadow-sm"
+            className="bg-yellow-500 text-white rounded-lg px-2 py-1 text-xs h-12 min-w-[70px] flex items-center justify-center shadow-sm"
           >
             <div className="font-bold">{pos}</div>
             {carInPosition && (
