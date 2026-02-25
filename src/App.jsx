@@ -20,6 +20,9 @@ const BASE_POSITIONS = [
   "EX1", "EX2"
 ];
 
+const TOP_DECK = ["TB", "OC", "TTR", "TTF", "TTR2"];
+const BOTTOM_DECK = ["TFB", "TMB", "EX1", "EX2"];
+
 const STINGER_LIBRARY = {
   "Cottrell CX-09": { Aluminum: 9000, Steel: 11000 },
   "Boydstun 9-Car": { Aluminum: 9200, Steel: 11200 },
@@ -233,14 +236,18 @@ export default function DeliverWarrior() {
   const grossWeight = totalVehicleWeight + truckBaseWeight + stingerWeight;
   const dotWarning = grossWeight > DOT_LIMIT;
   const dotPercentage = Math.min(100, Math.round((grossWeight / DOT_LIMIT) * 100));
+   
+   const topDeckCars = autoCars.filter(car =>
+  TOP_DECK.includes(car.position)
+);
 
-  const maxVehicleHeight = autoCars.length
-    ? Math.max(...autoCars.map((c) => c.height))
-    : 0;
+const maxTopHeight = topDeckCars.length
+  ? Math.max(...topDeckCars.map(c => c.height))
+  : 0;
 
-  const estimatedTotalHeight = maxVehicleHeight
-    ? maxVehicleHeight + 40
-    : 0;
+const estimatedTotalHeight = maxTopHeight
+  ? maxTopHeight + 40
+  : 0;
 
   const heightWarning = estimatedTotalHeight > HEIGHT_LIMIT_IN;
  
@@ -734,79 +741,86 @@ const generateSnapshot = async () => {
     );
   })}
 </div>
-         {/* VISUAL TRUCK DIAGRAM */}
-       <div ref={layoutRef} className="mt-6 border p-4 rounded bg-white">
-  <h2 className="font-bold mb-3">Visual Truck Layout</h2>
+      {/* VISUAL TRUCK DIAGRAM */}
+<div ref={layoutRef} className="mt-6 border p-6 rounded bg-white">
+  <h2 className="font-bold mb-4 text-center">Visual Truck Layout</h2>
 
-  <div className="flex items-center overflow-x-auto gap-4">
+  {/* TOP DECK */}
+  <div className="mb-8">
+    <div className="text-sm font-bold mb-2 text-yellow-600">TOP DECK</div>
+    <div className="flex gap-2 flex-wrap">
 
-    {/* Truck Head */}
-    <div className="flex flex-col items-center">
-     {["TB", "OC"].map((pos, index) => {
-  const carInPosition = autoCars.find(car => car.position === pos);
-
-  return (
-    <div
-      key={pos}
-      className={`w-20 h-14 ${
-        index === 0 ? "bg-blue-500" : "bg-blue-600"
-      } text-white flex flex-col items-center justify-center text-[10px] rounded p-1 ${index === 1 ? "mt-1" : ""}`}
-    >
-      <div className="font-bold">{pos}</div>
-      {carInPosition && (
-        <div className="truncate w-full text-center">
-          {carInPosition.model}
-        </div>
-      )}
-    </div>
-  );
-})} 
-      <div className="text-xs mt-1 font-semibold">HEAD</div>
-    </div>
-
-    <div className="text-2xl">?</div>
-
-    {/* Trailer */}
-    <div className="flex gap-2">
-  {BASE_POSITIONS.slice(2).map((pos) => {
-    const carInPosition = autoCars.find(car => car.position === pos);
-	let weightColor = "bg-gray-400";
-
-if (carInPosition) {
-  if (carInPosition.weight > 6500) {
-    weightColor = "bg-red-500";
-  } else if (carInPosition.weight > 4000) {
-    weightColor = "bg-yellow-500";
-  } else {
-    weightColor = "bg-green-500";
-  }
-}
-
-    return (
-      <div
-        key={pos}
-        className={`w-28 h-16 ${weightColor} text-white flex flex-col items-center justify-center text-[9px] rounded-xl p-2`}
-      >
-        <div className="font-bold">{pos}</div>
-        {carInPosition && (
-          <div className="truncate w-full text-center">
-            {carInPosition.model}
+      {/* HEAD vertical con ruedas */}
+      <div className="flex flex-col items-center">
+        <div className="bg-blue-700 text-white w-20 h-32 rounded-xl shadow-md flex flex-col">
+          <div className="flex-1 flex items-center justify-center border-b border-blue-500">
+            <span className="font-bold text-sm">TB</span>
           </div>
-        )}
+          <div className="flex-1 flex items-center justify-center">
+            <span className="font-bold text-sm">OC</span>
+          </div>
+        </div>
+
+        {/* Tractor Wheels */}
+        <div className="flex gap-3 mt-1">
+          <div className="w-5 h-5 bg-black rounded-full"></div>
+          <div className="w-5 h-5 bg-black rounded-full"></div>
+        </div>
       </div>
-    );
-  })}
-</div>
+
+      {TOP_DECK.map((pos) => {
+        const carInPosition = autoCars.find(car => car.position === pos);
+
+        return (
+          <div
+            key={pos}
+            className="bg-yellow-500 text-white rounded-xl p-2 text-xs w-24 text-center shadow-sm"
+          >
+            <div className="font-bold">{pos}</div>
+            {carInPosition && (
+              <div className="truncate">{carInPosition.model}</div>
+            )}
+          </div>
+        );
+      })}
+
+    </div>
   </div>
 
-    <div className="text-xs mt-3 text-gray-600">
-    Blue = Head Rack | Gray = Trailer Positions
+  {/* BOTTOM DECK */}
+  <div className="ml-32">
+    <div className="text-sm font-bold mb-2 text-green-600">BOTTOM DECK</div>
+    <div className="flex gap-2 flex-wrap">
+      {BOTTOM_DECK.map((pos) => {
+        const carInPosition = autoCars.find(car => car.position === pos);
+
+        return (
+          <div
+            key={pos}
+            className="bg-green-600 text-white rounded-xl p-2 text-xs w-24 text-center shadow-sm"
+          >
+            <div className="font-bold">{pos}</div>
+            {carInPosition && (
+              <div className="truncate">{carInPosition.model}</div>
+            )}
+          </div>
+        );
+      })}
+    </div>
   </div>
+
+  {/* TRAILER WHEELS */}
+  <div className="flex justify-center gap-8 mt-6">
+    <div className="w-6 h-6 bg-black rounded-full"></div>
+    <div className="w-6 h-6 bg-black rounded-full"></div>
+    <div className="w-6 h-6 bg-black rounded-full"></div>
+  </div>
+
 </div>
 
         </>
       )}
     </div>
   </div>
-);
+ );
 }
