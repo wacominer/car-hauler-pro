@@ -295,20 +295,23 @@ const saveTrip = () => {
   };
 
   localStorage.setItem("carHaulerTrip", JSON.stringify(trip));
-
-  console.log("Trip saved to browser memory");
+  console.log("Trip saved");
 };
 
- 
+const clearSavedTrip = () => {
+  localStorage.removeItem("carHaulerTrip");
 
+  setCars([]);
+  setTandemSlide(0);
+  setStingerModel("Cottrell CX-09");
+  setStingerMaterial("Aluminum");
+
+  console.log("Trip cleared");
+};
 
 const loadTrip = () => {
   const stored = localStorage.getItem("carHaulerTrip");
-
-  if (!stored) {
-    console.log("No saved trip found");
-    return;
-  }
+  if (!stored) return;
 
   const trip = JSON.parse(stored);
 
@@ -317,8 +320,7 @@ const loadTrip = () => {
   setStingerMaterial(trip.stingerMaterial || "Aluminum");
   setTandemSlide(trip.tandemSlide || 0);
 
-  console.log("Trip loaded from browser memory");
-  
+  console.log("Trip loaded");
 };
 
 
@@ -392,6 +394,12 @@ const loadTrip = () => {
   className="mt-3 ml-3 bg-blue-600 text-white px-4 py-2 rounded"
 >
   Load Saved Trip
+</button>
+<button
+  onClick={clearSavedTrip}
+  className="mt-3 ml-3 bg-red-600 text-white px-4 py-2 rounded"
+>
+  Clear Saved Trip
 </button>
         {cars.length >= maxCapacity && (
           <div className="text-red-600 font-bold mt-2">
