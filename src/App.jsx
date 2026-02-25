@@ -211,11 +211,13 @@ export default function DeliverWarrior() {
   const stingerWeight = STINGER_LIBRARY[stingerModel][stingerMaterial];
 
   // Determine capacity based on stinger name (7, 8, or 9 car)
-  const getStingerCapacity = () => {
-    if (stingerModel.includes("7")) return 7;
-    if (stingerModel.includes("8")) return 8;
-    return 9;
-  };
+   const getStingerCapacity = () => {
+  if (stingerModel.includes("9107-46 QL")) return 10;
+  if (stingerModel.includes("9108-53HM-LS")) return 8;
+  if (stingerModel.includes("7")) return 7;
+  if (stingerModel.includes("8")) return 8;
+  return 9;
+};
 
   const maxCapacity = getStingerCapacity();
 
