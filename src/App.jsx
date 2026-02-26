@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import html2canvas from "html2canvas";
+import logo from "./assets/logo.png";
 
 // =====================================
 // CAR HAULER PRO v1.3 (STABLE LOCKED VERSION + REALISM UPGRADE)
@@ -403,43 +404,15 @@ const generateSnapshot = async () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex justify-center items-start py-10">
   <div className="w-full max-w-5xl bg-white p-8 text-black shadow-2xl rounded-2xl">
-      <div className="mb-8 border-b pb-4">
+  <div className="mb-8 border-b pb-4">
   <h1 className="flex items-center gap-4 text-3xl font-extrabold tracking-widest uppercase">
-  <svg
-    width="60"
-    height="30"
-    viewBox="0 0 120 40"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="text-purple-600"
-  >
-    {/* Head */}
-    <rect x="5" y="15" width="25" height="10" fill="currentColor" />
-    
-    {/* Cab */}
-    <rect x="30" y="10" width="20" height="15" fill="currentColor" />
-    
-    {/* Stinger frame */}
-    <rect x="50" y="5" width="60" height="5" fill="currentColor" />
-    <rect x="50" y="20" width="60" height="5" fill="currentColor" />
-    
-    {/* Wheels */}
-    <circle cx="20" cy="30" r="5" fill="currentColor" />
-    <circle cx="45" cy="30" r="5" fill="currentColor" />
-    <circle cx="80" cy="30" r="5" fill="currentColor" />
-    <circle cx="105" cy="30" r="5" fill="currentColor" />
-  </svg>
-
+  <img src={logo} alt="Logo" className="w-25 h-auto" />
   Car Hauler Pro
 </h1>
-  
-  
-
-    
-
-  <p className="text-sm text-gray-500 mt-1">
+   <p className="text-sm text-gray-500 mt-1">
     Professional Load Optimization System
   </p>
+
 </div>
 
       {/* Search */}
@@ -511,9 +484,9 @@ const generateSnapshot = async () => {
   </div>
 )}
 		 
-		 <button
+ <button
   onClick={saveTrip}
-  className="bg-green-600 text-white rounded-xl p-2 text-xs w-full sm:w-24 text-center shadow-sm"
+  className="mt-3 ml-3 bg-green-600 hover:bg-green-700 transition-all duration-200 text-white px-4 py-2 rounded-xl shadow-md"
 >
   Save Current Trip
 </button>
