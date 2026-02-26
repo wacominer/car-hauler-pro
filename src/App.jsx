@@ -20,7 +20,7 @@ const BASE_POSITIONS = [
   "EX1", "EX2"
 ];
 
-const TOP_DECK = ["TB", "OC", "TTR", "TTF", "TTR2"];
+const TOP_DECK = ["TB", "TTR", "TTF", "TTR2"];
 const BOTTOM_DECK = ["TFB", "TMB", "EX1", "EX2"];
 
 const STINGER_LIBRARY = {
@@ -742,64 +742,79 @@ const generateSnapshot = async () => {
   })}
 </div>
       {/* VISUAL TRUCK DIAGRAM */}
-   <div 
-  ref={layoutRef} 
-  className="mt-6 w-full max-w-md mx-auto border p-4 rounded-xl bg-white shadow"
->
-  <h2 className="font-bold mb-4 text-center">
-  Visual Truck Layout
-  </h2>
-  
+      <div
+        ref={layoutRef}
+        className="mt-6 w-full max-w-md mx-auto border p-4 rounded-xl bg-white shadow"
+      >
+        <h2 className="font-bold mb-4 text-center">
+          Visual Truck Layout
+        </h2>
 
-  {/* TOP DECK */}
-   <div className="mb-2">
-    <div className="text-sm font-bold mb-2 text-yellow-600">TOP DECK</div>
-    <div className="flex overflow-x-auto gap-3 pb-2 scroll-smooth snap-x snap-mandatory">
-	
+        <div className="flex items-start gap-6 overflow-x-auto">
 
-      {/* HEAD vertical con ruedas */}
-      <div className="flex flex-col items-center flex-shrink-0">
-      <div className="bg-blue-700 text-white w-20 h-32 rounded-xl shadow-md flex flex-col">
-  <div className="flex-1 flex items-center justify-center border-b border-blue-500">
-    <span className="font-bold text-sm">TB</span>
-  </div>
+          {/* CABINA */}
+          <div className="flex flex-col items-center flex-shrink-0 mt-12">
+         <div className="bg-blue-700 text-white w-20 h-32 rounded-xl shadow-md flex flex-col">
+       <div className="flex-1 flex flex-col items-center justify-center border-b border-blue-500 px-1">
+  <span className="font-bold text-sm">OC</span>
+
+  {autoCars.find(car => car.position === "OC") && (
+    <span className="text-[10px] truncate text-center">
+      {autoCars.find(car => car.position === "OC").model}
+    </span>
+  )}
+</div>
   <div className="flex-1 flex items-center justify-center">
-    <span className="font-bold text-sm">OC</span>
+    <span className="font-bold text-sm">DRIVER</span>
   </div>
 </div>
 
-        {/* Tractor Wheels */}
-        <div className="flex gap-3 mt-1">
-          <div className="w-5 h-5 bg-black rounded-full"></div>
-          <div className="w-5 h-5 bg-black rounded-full"></div>
-        </div>
-      </div>
+            <div className="mt-2">
+              <div className="w-6 h-6 bg-black rounded-full"></div>
+            </div>
+          </div>
 
+       {/* TRAILER */}
+   <div className="relative flex flex-col bg-gray-200 px-6 py-4 border border-gray-600 shadow-sm">
+
+  {/* Vertical Frame */}
+  <div className="absolute left-0 top-0 bottom-0 w-2 bg-gray-600 rounded-l"></div>
+  <div className="absolute right-0 top-0 bottom-0 w-2 bg-gray-600 rounded-r"></div>
+
+  {/* TOP DECK */}
+  <div>
+    <div className="text-sm font-bold mb-2 text-yellow-700">TOP DECK</div>
+
+    <div className="flex gap-3 pb-2 border-b-2 border-gray-500">
       {TOP_DECK.map((pos) => {
-        const carInPosition = autoCars.find(car => car.position === pos);
+        const carInPosition = autoCars.find(
+          (car) => car.position === pos
+        );
 
         return (
-         <div
-  key={pos}
-  className="bg-yellow-500 text-white rounded-md px-2 py-1 text-[11px] w-[110px] h-[45px] flex flex-col items-center justify-center shadow"
-   >
-  <div className="font-bold">{pos}</div>
-  {carInPosition && (
-    <div className="truncate">{carInPosition.model}</div>
-    )}
-     </div>
+          <div
+            key={pos}
+            className="bg-yellow-500 text-white rounded-md px-2 py-1 text-[11px] w-[110px] h-[45px] flex flex-col items-center justify-center shadow"
+          >
+            <div className="font-bold">{pos}</div>
+            {carInPosition && (
+              <div className="truncate">{carInPosition.model}</div>
+            )}
+          </div>
         );
       })}
-
     </div>
   </div>
 
   {/* BOTTOM DECK */}
-  <div className="ml-2">
-    <div className="text-sm font-bold mb-2 text-green-600">BOTTOM DECK</div>
-    <div className="flex gap-3 overflow-x-auto pb-2">
+  <div className="mt-3">
+    <div className="text-sm font-bold mb-2 text-green-700">BOTTOM DECK</div>
+
+    <div className="flex gap-3 pb-2">
       {BOTTOM_DECK.map((pos) => {
-        const carInPosition = autoCars.find(car => car.position === pos);
+        const carInPosition = autoCars.find(
+          (car) => car.position === pos
+        );
 
         return (
           <div
@@ -817,17 +832,21 @@ const generateSnapshot = async () => {
   </div>
 
   {/* TRAILER WHEELS */}
-  <div className="flex justify-center gap-8 mt-6">
-    <div className="w-6 h-6 bg-black rounded-full"></div>
-    <div className="w-6 h-6 bg-black rounded-full"></div>
-    <div className="w-6 h-6 bg-black rounded-full"></div>
+  <div className="flex justify-center gap-16 mt-0">
+    <div className="w-7 h-7 bg-black rounded-full"></div>
+    <div className="w-7 h-7 bg-black rounded-full"></div>
   </div>
 
 </div>
 
-        </>
+        </div>
+      </div>
+            </>
       )}
+
     </div>
   </div>
- );
+);
 }
+  
+ 
