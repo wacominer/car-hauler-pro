@@ -742,16 +742,23 @@ const generateSnapshot = async () => {
   })}
 </div>
       {/* VISUAL TRUCK DIAGRAM */}
-<div ref={layoutRef} className="mt-6 border p-6 rounded bg-white">
-  <h2 className="font-bold mb-4 text-center">Visual Truck Layout</h2>
+   <div 
+  ref={layoutRef} 
+  className="mt-6 w-full max-w-md mx-auto border p-4 rounded-xl bg-white shadow"
+>
+  <h2 className="font-bold mb-4 text-center">
+  Visual Truck Layout
+  </h2>
+  
 
   {/* TOP DECK */}
-  <div className="mb-8">
+   <div className="mb-2">
     <div className="text-sm font-bold mb-2 text-yellow-600">TOP DECK</div>
-    <div className="grid grid-cols-2 gap-3 sm:flex sm:overflow-x-auto sm:pb-2">
+    <div className="flex overflow-x-auto gap-3 pb-2 scroll-smooth snap-x snap-mandatory">
+	
 
       {/* HEAD vertical con ruedas */}
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center flex-shrink-0">
       <div className="bg-blue-700 text-white w-20 h-32 rounded-xl shadow-md flex flex-col">
   <div className="flex-1 flex items-center justify-center border-b border-blue-500">
     <span className="font-bold text-sm">TB</span>
@@ -772,15 +779,15 @@ const generateSnapshot = async () => {
         const carInPosition = autoCars.find(car => car.position === pos);
 
         return (
-          <div
-            key={pos}
-            className="bg-yellow-500 text-white rounded-lg px-2 py-1 text-xs h-12 min-w-[70px] flex items-center justify-center shadow-sm"
-          >
-            <div className="font-bold">{pos}</div>
-            {carInPosition && (
-              <div className="truncate">{carInPosition.model}</div>
-            )}
-          </div>
+         <div
+  key={pos}
+  className="bg-yellow-500 text-white rounded-md px-2 py-1 text-[11px] w-[110px] h-[45px] flex flex-col items-center justify-center shadow"
+   >
+  <div className="font-bold">{pos}</div>
+  {carInPosition && (
+    <div className="truncate">{carInPosition.model}</div>
+    )}
+     </div>
         );
       })}
 
@@ -788,7 +795,7 @@ const generateSnapshot = async () => {
   </div>
 
   {/* BOTTOM DECK */}
-  <div className="ml-32">
+  <div className="ml-2">
     <div className="text-sm font-bold mb-2 text-green-600">BOTTOM DECK</div>
     <div className="flex gap-3 overflow-x-auto pb-2">
       {BOTTOM_DECK.map((pos) => {
