@@ -408,12 +408,25 @@ const generateSnapshot = async () => {
   if (!file) return;
 
   const reader = new FileReader();
+
   reader.onloadend = () => {
+    const imageData = reader.result;
+
+    // Mostrar en la app
     if (type === "pre") {
-      setPreLoadPhoto(reader.result);
+      setPreLoadPhoto(imageData);
     } else {
-      setPostLoadPhoto(reader.result);
+      setPostLoadPhoto(imageData);
     }
+
+    // Descargar automáticamente
+    const link = document.createElement("a");
+    link.href = imageData;
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    link.download = `${type}-load-${timestamp}.png`;
+
+    link.click();
   };
 
   reader.readAsDataURL(file);
