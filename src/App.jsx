@@ -193,6 +193,8 @@ export default function DeliverWarrior() {
   const [stingerMaterial, setStingerMaterial] = useState("Aluminum");
   const [optimizeMessage, setOptimizeMessage] = useState("");
     const [tandemSlide, setTandemSlide] = useState(0);
+	const [preLoadPhoto, setPreLoadPhoto] = useState(null);
+    const [postLoadPhoto, setPostLoadPhoto] = useState(null);
 	const layoutRef = useRef(null);
 	useEffect(() => {
   const stored = localStorage.getItem("carHaulerTrip");
@@ -399,14 +401,34 @@ const generateSnapshot = async () => {
   link.download = "car-hauler-load.png";
   link.click();
 };
+ 
+ 
+ const handlePhotoCapture = (event, type) => {
+  const file = event.target.files[0];
+  if (!file) return;
 
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    if (type === "pre") {
+      setPreLoadPhoto(reader.result);
+    } else {
+      setPostLoadPhoto(reader.result);
+    }
+  };
+
+  reader.readAsDataURL(file);
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex justify-center items-start py-10">
-  <div className="w-full max-w-5xl bg-white p-8 text-black shadow-2xl rounded-2xl">
+  <div className="w-full max-w-5xl bg-white p-4 sm:p- text-black shadow-2xl rounded-2xl mx-2 sm:mx-0">
   <div className="mb-8 border-b pb-4">
   <h1 className="flex items-center gap-4 text-3xl font-extrabold tracking-widest uppercase">
-  <img src={logo} alt="Logo" className="w-25 h-auto" />
+  <img 
+  src={logo} 
+  alt="Logo" 
+  className="h-16 sm:h-20 w-auto object-contain"
+/>
   Car Hauler Pro
 </h1>
    <p className="text-sm text-gray-500 mt-1">
@@ -507,10 +529,42 @@ const generateSnapshot = async () => {
 
 <button
   onClick={generateSnapshot}
-  className="mt-3 ml-3 bg-black hover:bg-gray-800 transition-all duration-200 text-white px-4 py-2 rounded-xl shadow-md"
+  className="mt-3 ml-3 bg-black hover:bg-gray-800 transition-all duration-200 text-white px-4 py-2 rounded-xl shadow-md flex items-center gap-2"
 >
-  ?? Generate Snapshot
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className="w-5 h-5"
+  >
+    <path d="M4 7a2 2 0 012-2h2l1-1h6l1 1h2a2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V7zm8 3a4 4 0 100 8 4 4 0 000-8z"/>
+  </svg>
+
+  Snapshot Car Configuration
 </button>
+{/* PRE LOAD PHOTO */}
+<label className="mt-3 ml-3 bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-xl shadow-md cursor-pointer">
+  ?? Pre-Load Photo
+  <input
+    type="file"
+    accept="image/*"
+    capture="environment"
+    className="hidden"
+    onChange={(e) => handlePhotoCapture(e, "pre")}
+  />
+</label>
+
+{/* POST LOAD PHOTO */}
+<label className="mt-3 ml-3 bg-blue-900 hover:bg-blue-800 text-white px-4 py-2 rounded-xl shadow-md cursor-pointer">
+  ?? Post-Load Photo
+  <input
+    type="file"
+    accept="image/*"
+    capture="environment"
+    className="hidden"
+    onChange={(e) => handlePhotoCapture(e, "post")}
+  />
+</label>
         {cars.length >= maxCapacity && (
           <div className="text-red-600 font-bold mt-2">
             Stinger capacity limit reached ({maxCapacity} vehicles)
@@ -811,7 +865,27 @@ const generateSnapshot = async () => {
   </div>
 
 </div>
+{preLoadPhoto && (
+  <div className="mt-8">
+    <h3 className="font-bold mb-2">Pre-Load Evidence</h3>
+    <img
+      src={preLoadPhoto}
+      alt="Pre Load"
+      className="rounded-xl shadow-md max-w-full"
+    />
+  </div>
+)}
 
+{postLoadPhoto && (
+  <div className="mt-8">
+    <h3 className="font-bold mb-2">Post-Load Evidence</h3>
+    <img
+      src={postLoadPhoto}
+      alt="Post Load"
+      className="rounded-xl shadow-md max-w-full"
+    />
+  </div>
+)}
         </div>
       </div>
             </>
