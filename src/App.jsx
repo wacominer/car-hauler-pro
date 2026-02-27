@@ -188,14 +188,18 @@ const classifyVehicle = (model, weight, height) => {
 export default function DeliverWarrior() {
   const [cars, setCars] = useState([]);
   const [selectedModel, setSelectedModel] = useState("");
+  const [vin, setVin] = useState("");
   const [search, setSearch] = useState("");
   const [stingerModel, setStingerModel] = useState("Cottrell CX-09");
   const [stingerMaterial, setStingerMaterial] = useState("Aluminum");
   const [optimizeMessage, setOptimizeMessage] = useState("");
-    const [tandemSlide, setTandemSlide] = useState(0);
-	const [preLoadPhoto, setPreLoadPhoto] = useState(null);
-    const [postLoadPhoto, setPostLoadPhoto] = useState(null);
-	const layoutRef = useRef(null);
+   const [tandemSlide, setTandemSlide] = useState(0);
+   const [preLoadPhoto, setPreLoadPhoto] = useState(null);
+   const [postLoadPhoto, setPostLoadPhoto] = useState(null);
+   const [preLoadTime, setPreLoadTime] = useState(null);
+   const [postLoadTime, setPostLoadTime] = useState(null);
+   const [driverName, setDriverName] = useState("");
+   const layoutRef = useRef(null);
 	useEffect(() => {
   const stored = localStorage.getItem("carHaulerTrip");
 
@@ -318,12 +322,24 @@ const trailerAxle =
   };
 
   const addVehicle = () => {
-    if (cars.length >= maxCapacity) return;
-    if (!selectedModel) return;
-    const data = VEHICLE_LIBRARY[selectedModel];
-    setCars((prev) => [...prev, { ...data, model: selectedModel, id: Date.now() }]);
-    setSelectedModel("");
-  };
+  if (cars.length >= maxCapacity) return;
+  if (!selectedModel) return;
+
+  const data = VEHICLE_LIBRARY[selectedModel];
+
+  setCars((prev) => [
+    ...prev,
+    {
+      ...data,
+      model: selectedModel,
+      vin: vin, // ?? ahora guarda el VIN
+      id: Date.now()
+    }
+  ]);
+
+  setSelectedModel("");
+  setVin(""); // ?? limpia el campo después de agregar
+};
   
   const optimizeLoad = () => {
   const sorted = [...cars].sort((a, b) => b.weight - a.weight);
@@ -410,24 +426,27 @@ const generateSnapshot = async () => {
   const reader = new FileReader();
 
   reader.onloadend = () => {
-    const imageData = reader.result;
+  const imageData = reader.result;
+  const nowReadable = new Date().toLocaleString();
 
-    // Mostrar en la app
-    if (type === "pre") {
-      setPreLoadPhoto(imageData);
-    } else {
-      setPostLoadPhoto(imageData);
-    }
+  // Mostrar en la app + guardar hora visible
+  if (type === "pre") {
+    setPreLoadPhoto(imageData);
+    setPreLoadTime(nowReadable);
+  } else {
+    setPostLoadPhoto(imageData);
+    setPostLoadTime(nowReadable);
+  }
 
-    // Descargar automáticamente
-    const link = document.createElement("a");
-    link.href = imageData;
+  // Descargar automáticamente
+  const link = document.createElement("a");
+  link.href = imageData;
 
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    link.download = `${type}-load-${timestamp}.png`;
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+  link.download = `${type}-load-${timestamp}.png`;
 
-    link.click();
-  };
+  link.click();
+};
 
   reader.readAsDataURL(file);
 };
@@ -495,6 +514,13 @@ const generateSnapshot = async () => {
             </option>
           ))}
         </select>
+		<input
+       type="text"
+       placeholder="Enter VIN (17 characters)"
+        value={vin}
+       onChange={(e) => setVin(e.target.value.toUpperCase())}
+        className="border p-2 w-full mb-2"
+    />
         <button
           onClick={addVehicle}
           disabled={cars.length >= maxCapacity}
@@ -606,10 +632,13 @@ const generateSnapshot = async () => {
               const tallWarning = car.height > 76 ? "text-orange-600 font-bold" : "";
 
               return (
-                <div key={car.id} className="flex justify-between border-b py-1">
-                  <span className={`${heavyClass} ${tallWarning}`}>
-                    #{i + 1} {car.model} ({car.position}) [{type}]
-                  </span>
+                   <div key={car.id} className="flex justify-between border-b py-1">
+                    <span className={`${heavyClass} ${tallWarning}`}>
+                     #{i + 1} {car.model} ({car.position}) [{type}] — 
+                      <span className="text-red-600 font-bold animate-pulse">
+                      VIN: {car.vin}
+                        </span>
+                       </span>
                   <span className="text-sm">Axle Impact: {car.axleImpact} lbs</span>
                   <button
                     onClick={() => removeVehicle(car.id)}
@@ -781,132 +810,134 @@ const generateSnapshot = async () => {
     );
   })}
 </div>
-      {/* VISUAL TRUCK DIAGRAM */}
-      <div
-        ref={layoutRef}
-        className="mt-6 w-full max-w-md mx-auto border p-4 rounded-xl bg-white shadow"
-      >
-        <h2 className="font-bold mb-4 text-center">
-          Visual Truck Layout
-        </h2>
+  {/* VISUAL TRUCK DIAGRAM */}
+<div
+  ref={layoutRef}
+  className="mt-6 w-full max-w-md mx-auto border p-4 rounded-xl bg-white shadow"
+>
+  <h2 className="font-bold mb-4 text-center">
+    Visual Truck Layout
+  </h2>
 
-        <div className="flex items-start gap-6 overflow-x-auto">
+  <div className="flex items-start gap-6 overflow-x-auto">
 
-          {/* CABINA */}
-          <div className="flex flex-col items-center flex-shrink-0 mt-12">
-         <div className="bg-blue-700 text-white w-20 h-32 rounded-xl shadow-md flex flex-col">
-       <div className="flex-1 flex flex-col items-center justify-center border-b border-blue-500 px-1">
-  <span className="font-bold text-sm">OC</span>
+    {/* CABINA */}
+    <div className="flex flex-col items-center flex-shrink-0 mt-12">
+      <div className="bg-blue-700 text-white w-20 h-32 rounded-xl shadow-md flex flex-col">
+        <div className="flex-1 flex flex-col items-center justify-center border-b border-blue-500 px-1">
+          <span className="font-bold text-sm">OC</span>
+          {autoCars.find(car => car.position === "OC") && (
+            <span className="text-[10px] truncate text-center">
+              {autoCars.find(car => car.position === "OC").model}
+            </span>
+          )}
+        </div>
 
-  {autoCars.find(car => car.position === "OC") && (
-    <span className="text-[10px] truncate text-center">
-      {autoCars.find(car => car.position === "OC").model}
-    </span>
-  )}
-</div>
-  <div className="flex-1 flex items-center justify-center">
-    <span className="font-bold text-sm">DRIVER</span>
-  </div>
-</div>
-
-            <div className="mt-2">
-              <div className="w-6 h-6 bg-black rounded-full"></div>
-            </div>
-          </div>
-
-       {/* TRAILER */}
-   <div className="relative flex flex-col bg-gray-200 px-6 py-4 border border-gray-600 shadow-sm">
-
-  {/* Vertical Frame */}
-  <div className="absolute left-0 top-0 bottom-0 w-2 bg-gray-600 rounded-l"></div>
-  <div className="absolute right-0 top-0 bottom-0 w-2 bg-gray-600 rounded-r"></div>
-
-  {/* TOP DECK */}
-  <div>
-    <div className="text-sm font-bold mb-2 text-yellow-700">TOP DECK</div>
-
-    <div className="flex gap-3 pb-2 border-b-2 border-gray-500">
-      {TOP_DECK.map((pos) => {
-        const carInPosition = autoCars.find(
-          (car) => car.position === pos
-        );
-
-        return (
-          <div
-            key={pos}
-            className="bg-yellow-500 text-white rounded-md px-2 py-1 text-[11px] w-[110px] h-[45px] flex flex-col items-center justify-center shadow"
-          >
-            <div className="font-bold">{pos}</div>
-            {carInPosition && (
-              <div className="truncate">{carInPosition.model}</div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  </div>
-
-  {/* BOTTOM DECK */}
-  <div className="mt-3">
-    <div className="text-sm font-bold mb-2 text-green-700">BOTTOM DECK</div>
-
-    <div className="flex gap-3 pb-2">
-      {BOTTOM_DECK.map((pos) => {
-        const carInPosition = autoCars.find(
-          (car) => car.position === pos
-        );
-
-        return (
-          <div
-            key={pos}
-            className="bg-green-600 text-white rounded-xl p-2 text-xs w-24 text-center shadow-sm"
-          >
-            <div className="font-bold">{pos}</div>
-            {carInPosition && (
-              <div className="truncate">{carInPosition.model}</div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  </div>
-
-  {/* TRAILER WHEELS */}
-  <div className="flex justify-center gap-16 mt-0">
-    <div className="w-7 h-7 bg-black rounded-full"></div>
-    <div className="w-7 h-7 bg-black rounded-full"></div>
-  </div>
-
-</div>
-{preLoadPhoto && (
-  <div className="mt-8">
-    <h3 className="font-bold mb-2">Pre-Load Evidence</h3>
-    <img
-      src={preLoadPhoto}
-      alt="Pre Load"
-      className="rounded-xl shadow-md max-w-full"
-    />
-  </div>
-)}
-
-{postLoadPhoto && (
-  <div className="mt-8">
-    <h3 className="font-bold mb-2">Post-Load Evidence</h3>
-    <img
-      src={postLoadPhoto}
-      alt="Post Load"
-      className="rounded-xl shadow-md max-w-full"
-    />
-  </div>
-)}
+        <div className="flex-1 flex items-center justify-center">
+          <span className="font-bold text-sm">DRIVER</span>
         </div>
       </div>
-            </>
-      )}
+
+      <div className="mt-2">
+        <div className="w-6 h-6 bg-black rounded-full"></div>
+      </div>
+    </div>
+
+    {/* TRAILER */}
+    <div className="relative flex flex-col bg-gray-200 px-6 py-4 border border-gray-600 shadow-sm">
+
+      <div className="absolute left-0 top-0 bottom-0 w-2 bg-gray-600 rounded-l"></div>
+      <div className="absolute right-0 top-0 bottom-0 w-2 bg-gray-600 rounded-r"></div>
+
+      {/* TOP DECK */}
+      <div>
+        <div className="text-sm font-bold mb-2 text-yellow-700">TOP DECK</div>
+        <div className="flex gap-3 pb-2 border-b-2 border-gray-500">
+          {TOP_DECK.map((pos) => {
+            const carInPosition = autoCars.find(car => car.position === pos);
+            return (
+              <div
+                key={pos}
+                className="bg-yellow-500 text-white rounded-md px-2 py-1 text-[11px] w-[110px] h-[45px] flex flex-col items-center justify-center shadow"
+              >
+                <div className="font-bold">{pos}</div>
+                {carInPosition && (
+                  <div className="truncate">{carInPosition.model}</div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* BOTTOM DECK */}
+      <div className="mt-3">
+        <div className="text-sm font-bold mb-2 text-green-700">BOTTOM DECK</div>
+        <div className="flex gap-3 pb-2">
+          {BOTTOM_DECK.map((pos) => {
+            const carInPosition = autoCars.find(car => car.position === pos);
+            return (
+              <div
+                key={pos}
+                className="bg-green-600 text-white rounded-xl p-2 text-xs w-24 text-center shadow-sm"
+              >
+                <div className="font-bold">{pos}</div>
+                {carInPosition && (
+                  <div className="truncate">{carInPosition.model}</div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* TRAILER WHEELS */}
+      <div className="flex justify-center gap-16 mt-2">
+        <div className="w-7 h-7 bg-black rounded-full"></div>
+        <div className="w-7 h-7 bg-black rounded-full"></div>
+      </div>
+
+    </div>
+  </div>
+
+  {/* PRE LOAD PHOTO */}
+  {preLoadPhoto && (
+    <div className="mt-8">
+      <h3 className="font-bold mb-1">
+        Pre-Load Evidence — {driverName}
+      </h3>
+      <p className="text-xs text-gray-500 mb-2">
+        {preLoadTime}
+      </p>
+      <img
+        src={preLoadPhoto}
+        alt="Pre Load"
+        className="rounded-xl shadow-md max-w-full"
+      />
+    </div>
+  )}
+
+  {/* POST LOAD PHOTO */}
+  {postLoadPhoto && (
+    <div className="mt-8">
+      <h3 className="font-bold mb-1">
+        Post-Load Evidence — {driverName}
+      </h3>
+      <p className="text-xs text-gray-500 mb-2">
+        {postLoadTime}
+      </p>
+      <img
+        src={postLoadPhoto}
+        alt="Post Load"
+        className="rounded-xl shadow-md max-w-full"
+      />
+    </div>
+  )}
+</div>
+      </>
+    )}
 
     </div>
   </div>
 );
 }
-  
- 
